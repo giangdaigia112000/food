@@ -5,11 +5,16 @@ import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 
 let store
+export interface  InitialStateProps  {
+  lastUpdate: number,
+  light: boolean,
+  exampleData: any,
+  error: string,
+}
 
-const exampleInitialState = {
+const exampleInitialState :InitialStateProps = {
   lastUpdate: 0,
   light: false,
-  count: 0,
   exampleData: [],
   error: null,
 }
@@ -33,20 +38,7 @@ export const reducer = (state = exampleInitialState, action) => {
         light: !!action.light,
       }
     case actionTypes.INCREMENT:
-      return {
-        ...state,
-        count: state.count + 1,
-      }
-    case actionTypes.DECREMENT:
-      return {
-        ...state,
-        count: state.count - 1,
-      }
-    case actionTypes.RESET:
-      return {
-        ...state,
-        count: exampleInitialState.count,
-      }
+    
     case actionTypes.LOAD_EXAMPLE_DATA:
       return {
         ...state,
@@ -60,28 +52,7 @@ export const reducer = (state = exampleInitialState, action) => {
 }
 
 // ACTIONS
-export const serverRenderClock = () => {
-  return { type: actionTypes.TICK, light: false, ts: Date.now() }
-}
-export const startClock = () => {
-  return { type: actionTypes.TICK, light: true, ts: Date.now() }
-}
 
-export const incrementCount = () => {
-  return { type: actionTypes.INCREMENT }
-}
-
-export const decrementCount = () => {
-  return { type: actionTypes.DECREMENT }
-}
-
-export const resetCount = () => {
-  return { type: actionTypes.RESET }
-}
-
-export const loadExampleData = (data) => {
-  return { type: actionTypes.LOAD_EXAMPLE_DATA, data }
-}
 
 export const loadingExampleDataFailure = () => {
   return { type: actionTypes.LOADING_DATA_FAILURE }
@@ -95,10 +66,10 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, reducer)
 
-function makeStore(initialState = exampleInitialState) {
+function makeStore(exampleInitialState) {
   return createStore(
     persistedReducer,
-    initialState,
+    exampleInitialState,
     composeWithDevTools(applyMiddleware())
   )
 }
