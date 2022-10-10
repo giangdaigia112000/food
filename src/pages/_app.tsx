@@ -9,8 +9,8 @@ function MyApp({ Component, pageProps }: AppProps) {
     return (
         <Provider store={store}>
             <Head>
-                <title>SGM Music</title>
-                <meta name="description" content="Our music" />
+                <title>Juwan Food</title>
+                <meta name="description" content="Juwan Food" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <Component {...pageProps} />
