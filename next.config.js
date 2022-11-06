@@ -20,7 +20,6 @@ module.exports = {
         ],
     },
     env: {
-        basePathApi: "https://api.sgm-music.com/api",
-        GG_MAP_API_KEY: "AIzaSyArKqCDpYvuKJ8U77Uqd2RzpjW31nQ27eY",
+        BASE_API: "https://d7e9-222-252-27-131.ap.ngrok.io/",
     },
 };

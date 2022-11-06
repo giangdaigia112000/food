@@ -4,6 +4,11 @@ import { appWithTranslation } from "next-i18next";
 import store from "../app/store";
 import Head from "next/head";
 import { Provider } from "react-redux";
+import { useEffect } from "react";
+import { useAppDispatch } from "src/app/hooks";
+import { checkMe } from "src/app/slice/loginSlice";
+import MainLayout from "src/layouts/MainLayout";
+import ScrollBtn from "src/layouts/components/ScrollBtn";
 
 function MyApp({ Component, pageProps }: AppProps) {
     return (
@@ -13,7 +18,10 @@ function MyApp({ Component, pageProps }: AppProps) {
                 <meta name="description" content="Juwan Food" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <Component {...pageProps} />
+            <MainLayout>
+                <Component {...pageProps} />
+            </MainLayout>
+            <ScrollBtn />
         </Provider>
     );
 }

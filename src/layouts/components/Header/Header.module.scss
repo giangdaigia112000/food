@@ -4,4 +4,22 @@
     z-index: 2;
     top: 0;
     left: 0;
+    width: 100%;
+}
+.my-profile {
+    position: relative;
+    .my-profile__main {
+        cursor: default;
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
+            rgba(0, 0, 0, 0.22) 0px 10px 10px;
+        border-radius: 5px;
+        display: none;
+    }
+    &:hover {
+        .my-profile__main {
+            display: block;
+        }
+    }
 }

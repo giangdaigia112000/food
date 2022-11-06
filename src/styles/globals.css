@@ -4,6 +4,10 @@
 
 @import "~antd/dist/antd.css";
 /* setup init css */
+@font-face {
+    font-family: fz;
+    src: url("../assets/fonts/FzBlackRangger.ttf") format("truetype");
+}
 * {
     margin: 0;
     padding: 0;
@@ -27,13 +31,13 @@ a {
 
 .swiper {
     width: 100%;
-    height: 300px;
+    height: 100%;
 }
 
 .swiper-slide {
     text-align: center;
     font-size: 18px;
-    background: rgb(105, 105, 105);
+    background: #ca0000;
 
     /* Center slide text vertically */
     display: -webkit-box;
@@ -49,10 +53,6 @@ a {
     -webkit-align-items: center;
     align-items: center;
 }
-
-.swiper-slide img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.ant-card-body {
+    padding: 0;
 }

@@ -1,12 +1,19 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
+import loginReducer from "./slice/loginSlice";
+import productReducer from "./slice/productSlice";
+import cardReducer from "./slice/cartSlice";
 
-export function makeStore() {
-    return configureStore({
-        reducer: {},
-    });
-}
-
-const store = makeStore();
+export const store = configureStore({
+    reducer: {
+        login: loginReducer,
+        product: productReducer,
+        card: cardReducer,
+    },
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: false,
+        }),
+});
 
 export type AppState = ReturnType<typeof store.getState>;
 
