@@ -20,6 +20,6 @@ module.exports = {
         ],
     },
     env: {
-        BASE_API: "https://d7e9-222-252-27-131.ap.ngrok.io/",
+        BASE_API: "https://0e65-222-252-27-131.ap.ngrok.io/",
     },
 };

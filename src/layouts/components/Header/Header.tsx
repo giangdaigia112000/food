@@ -385,7 +385,7 @@ const Header = () => {
                         </ul>
                     </nav>
                     <div className="h-full  flex items-center  border-r-[1px] border-[#bababa61]">
-                        {isLogin === true ? (
+                        {isLogin === true && user ? (
                             <div
                                 className={`h-full flex items-center rounded-xl p-2 cursor-pointer ${cx(
                                     "my-profile"

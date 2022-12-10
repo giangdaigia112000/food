@@ -76,6 +76,7 @@ export interface Order {
     message: string;
     created_at: string;
     updated_at: string;
+    code: string;
     order_items: [
         {
             id: number;
@@ -92,4 +93,34 @@ export interface Order {
             products: Product;
         }
     ];
+}
+
+export interface Blog {
+    id: number;
+    title: string;
+    thumb: string;
+    content: string;
+    desc: string;
+    type: number;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface Slider {
+    id: number;
+    name: string;
+    image: string;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface Voucher {
+    id: number;
+    code: string;
+    discount: number;
+    type: string;
+    start: string;
+    end: string;
+    created_at: string;
+    updated_at: string;
 }

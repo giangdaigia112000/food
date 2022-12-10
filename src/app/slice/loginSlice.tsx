@@ -10,7 +10,7 @@ import { auth, provider } from "src/utils/firebase";
 export interface LoginState {
     isLogin: boolean;
     isLoginSocial: boolean;
-    user: User;
+    user: User | null;
     token: string;
     messageError: string;
     loadingLogin: boolean;
@@ -60,14 +60,10 @@ export const loginSocial = createAsyncThunk(
 );
 
 export const checkMe = createAsyncThunk("checkMe", async ({}, thunkAPI) => {
-    try {
-        let resData = await axiosClient.post("api/get-me", {
-            _method: "get",
-        });
-        return resData.data;
-    } catch (error) {
-        return thunkAPI.rejectWithValue({ error: error });
-    }
+    let resData = await axiosClient.post("api/get-me", {
+        _method: "get",
+    });
+    return resData.data;
 });
 
 export const changePass = createAsyncThunk(
@@ -103,14 +99,9 @@ export const userRegister = createAsyncThunk(
 );
 
 const initialState: LoginState = {
-    isLogin: true,
+    isLogin: false,
     isLoginSocial: false,
-    user: {
-        id: 3,
-        email: "giangdaigia001@gmail.com",
-        name: "giang",
-        role: 1,
-    } as User,
+    user: null,
     token: getStorge("token") ? getStorge("token") : "",
     loadingLogin: false,
     messageError: "",
@@ -164,12 +155,7 @@ export const LoginSlice = createSlice({
         },
         [checkMe.rejected.toString()]: (state, { payload }) => {
             state.loading = false;
-            if (payload.error.response?.status) {
-                let statusCode = payload.error.response.status;
-                if (statusCode !== 401) error("Lỗi từ server");
-            } else {
-                error("ERROR");
-            }
+            removeStorage("token");
         },
         [checkMe.pending.toString()]: (state) => {
             state.loading = true;
@@ -199,6 +185,7 @@ export const LoginSlice = createSlice({
             state,
             action: PayloadAction<any>
         ) => {
+            success("Tạo tài khoản thành công!!!");
             state.loadingLogin = false;
         },
         [userRegister.rejected.toString()]: (state, { payload }) => {

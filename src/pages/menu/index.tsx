@@ -88,9 +88,9 @@ const Menu: NextPage = () => {
                     ) : (
                         <>
                             {listCategory &&
-                                listCategory.map((item, idx) => (
+                                listCategory.map((item) => (
                                     <li
-                                        key={idx}
+                                        key={item.id}
                                         className={`flex flex-col items-center justify-center flex-1 cursor-pointer py-2 ${
                                             active === item.id
                                                 ? " bg-[#ffb9b9] rounded-md "
@@ -100,7 +100,10 @@ const Menu: NextPage = () => {
                                             handleChangCategory(item.id);
                                         }}
                                     >
-                                        <img src={`/icon/${item.img}`} />
+                                        <img
+                                            alt="food"
+                                            src={`${process.env.BASE_API}${item.img}`}
+                                        />
                                         <h2
                                             className={`text-xs laptop:text-base font-semibold pt-1 ${
                                                 active === item.id
@@ -114,18 +117,18 @@ const Menu: NextPage = () => {
                                 ))}
                             <li
                                 className={`flex flex-col items-center justify-center flex-1 cursor-pointer py-2 ${
-                                    active === listCategory.length + 1
+                                    active === 100000000
                                         ? " bg-[#ffb9b9] rounded-md "
                                         : ""
                                 }`}
                                 onClick={() => {
-                                    handleListSale(listCategory.length + 1);
+                                    handleListSale(100000000);
                                 }}
                             >
                                 <img src={`/icon/icon_combo_active.png`} />
                                 <h2
                                     className={`text-xs laptop:text-base font-semibold pt-1 ${
-                                        active === listCategory.length + 1
+                                        active === 100000000
                                             ? "text-[#7c2222]"
                                             : ""
                                     }`}

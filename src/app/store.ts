@@ -2,12 +2,16 @@ import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import loginReducer from "./slice/loginSlice";
 import productReducer from "./slice/productSlice";
 import cardReducer from "./slice/cartSlice";
+import postReducer from "./slice/postSlice";
+import slideReducer from "./slice/slideSlice";
 
 export const store = configureStore({
     reducer: {
         login: loginReducer,
         product: productReducer,
         card: cardReducer,
+        post: postReducer,
+        slide: slideReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

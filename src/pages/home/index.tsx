@@ -15,6 +15,7 @@ import BackgroundTitle from "@/components/BackgroundTitle";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "src/app/hooks";
 import { getListProductHome } from "src/app/slice/productSlice";
+import { getAllSlide } from "src/app/slice/slideSlice";
 const cx = classNames.bind(styles);
 
 const banner = [
@@ -32,9 +33,11 @@ const Home: NextPage = () => {
     const { listCombo, listBestseller } = useAppSelector(
         (state) => state.product
     );
+    const { listSlide } = useAppSelector((state) => state.slide);
     const disspatch = useAppDispatch();
     useEffect(() => {
         disspatch(getListProductHome());
+        disspatch(getAllSlide());
     }, []);
     return (
         <div className="w-full">
@@ -54,15 +57,17 @@ const Home: NextPage = () => {
                     }}
                     lazy
                 >
-                    {banner.map((b, idx) => (
-                        <SwiperSlide key={b.id}>
-                            <img
-                                data-src={b.img}
-                                className="swiper-lazy block h-full w-full object-cover "
-                            />
-                            <div className="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
-                        </SwiperSlide>
-                    ))}
+                    {listSlide.length > 0 &&
+                        listSlide.map((slide) => (
+                            <SwiperSlide key={slide.id}>
+                                <img
+                                    className="swiper-lazy block h-full w-full object-cover"
+                                    alt="food"
+                                    src={`${process.env.BASE_API}${slide.image}`}
+                                />
+                                <div className="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+                            </SwiperSlide>
+                        ))}
                 </Swiper>
             </section>
             <section className="w-full">

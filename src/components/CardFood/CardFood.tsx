@@ -48,7 +48,7 @@ function CardFood({ product }: Prop) {
                 cover={
                     <div className="w-full overflow-hidden">
                         <img
-                            className="w-full h-[250px] object-cover hover:scale-[1.2]  transition-all duration-200"
+                            className="w-full h-[180px] laptop:h-[250px] object-cover hover:scale-[1.2]  transition-all duration-200"
                             alt="food"
                             src={`${process.env.BASE_API}${product.thumb}`}
                         />

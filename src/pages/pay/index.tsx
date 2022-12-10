@@ -1,19 +1,34 @@
 import BackgroundTitle from "@/components/BackgroundTitle";
 import { Button, Form, Input, Select, InputNumber } from "antd";
+import Search from "antd/lib/input/Search";
 import { useRouter } from "next/router";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "src/app/hooks";
-import { deleteProductToCart, orderProduct } from "src/app/slice/cartSlice";
+import {
+    checkCode,
+    deleteProductToCart,
+    orderProduct,
+    setOderSuccess,
+    setVoucher,
+} from "src/app/slice/cartSlice";
 
 const Pay = () => {
     const { push } = useRouter();
-    const { listProductCart, listShop, loadingOrder } = useAppSelector(
-        (state) => state.card
-    );
+    const {
+        listProductCart,
+        listShop,
+        loadingOrder,
+        oderSuccess,
+        loadingCheckCode,
+        voucher,
+    } = useAppSelector((state) => state.card);
     const dispatch = useAppDispatch();
     const handleDeleteProductCart = (id: number) => {
         dispatch(deleteProductToCart(id));
     };
+    useEffect(() => {
+        dispatch(setVoucher(null));
+    }, []);
     const handlePriceProductCart = useMemo(() => {
         const price = listProductCart.length
             ? listProductCart.reduce((result, current) => {
@@ -31,9 +46,15 @@ const Pay = () => {
 
     const onFinish = (values: any) => {
         let { message } = values;
+        const code = voucher ? voucher.code : "";
         if (!message) message = "";
-        dispatch(orderProduct({ ...values, message })).then(() => {
-            push("/order");
+        dispatch(orderProduct({ ...values, code, message })).then(() => {
+            if (oderSuccess) {
+                console.log(oderSuccess);
+
+                push("/order");
+                dispatch(setOderSuccess(false));
+            }
         });
     };
 
@@ -109,15 +130,62 @@ const Pay = () => {
                             </Button>
                         </div>
                     ))}
+                    <div className="w-full">
+                        <div className="w-full max-w-[300px] pt-[20px] pl-[10px]">
+                            <Search
+                                placeholder="Mã khuyến mãi"
+                                allowClear
+                                enterButton={
+                                    <Button
+                                        type="primary"
+                                        danger
+                                        loading={loadingCheckCode}
+                                    >
+                                        Sử dụng mã
+                                    </Button>
+                                }
+                                onSearch={(value: string) => {
+                                    dispatch(checkCode(value));
+                                }}
+                            />
+                        </div>
+                    </div>
                     <div className="w-full flex justify-end items-center p-[20px] pb-[0px]">
                         <span className="px-[2px] text-sm">
                             Tổng gía trị đơn hàng:{" "}
                         </span>
-                        <span className="font-semibold text-base laptop:text-xl text-[#b11c1c]">
+                        <span
+                            className={`font-semibold text-base laptop:text-xl text-[#b11c1c] ${
+                                voucher && "line-through"
+                            }`}
+                        >
                             {handlePriceProductCart}
                         </span>
                         <span className="px-[2px] text-sm">đ</span>
                     </div>
+                    {voucher && (
+                        <>
+                            <div className="w-full flex justify-end items-center pb-[0px] pr-[20px]">
+                                <span className="px-[2px] text-sm">
+                                    Giá sau khuyến mãi
+                                </span>
+                            </div>
+                            <div className="w-full flex justify-end items-center pb-[0px] pr-[20px]">
+                                <span
+                                    className={`font-semibold text-base laptop:text-xl text-[#b11c1c] `}
+                                >
+                                    {voucher.type === "%"
+                                        ? (handlePriceProductCart *
+                                              (100 - voucher.discount)) /
+                                          100
+                                        : handlePriceProductCart -
+                                          voucher.discount}
+                                </span>
+                                <span className="px-[2px] text-sm">đ</span>
+                            </div>
+                        </>
+                    )}
+
                     <div className="w-full flex justify-end items-center px-[20px] pb-[20px]">
                         <span className="px-[2px] text-sm">
                             (Chưa tính giá vận chuyển)

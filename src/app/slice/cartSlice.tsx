@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axiosClient from "src/api/axiosClients";
 import { error, success, warning } from "src/features/noti";
-import { Order, Product, ProductCart, Shop } from "src/interface";
+import { Order, Product, ProductCart, Shop, Voucher } from "src/interface";
 
 export interface CartState {
     isOpenCart: boolean;
@@ -13,6 +13,9 @@ export interface CartState {
     listProductCart: ProductCart[];
     listShop: Shop[];
     listOder: Order[];
+    oderSuccess: boolean;
+    voucher: Voucher | null;
+    loadingCheckCode: boolean;
 }
 export const getListProductToCart = createAsyncThunk(
     "getListProductToCart",
@@ -83,9 +86,8 @@ export const orderProduct = createAsyncThunk(
             let resData = await axiosClient.post("api/order", {
                 ...infoCus,
             });
+            thunkAPI.dispatch(setOderSuccess(true));
             thunkAPI.dispatch(getListProductToCart());
-            console.log(resData.data);
-
             return resData.data;
         } catch (error) {
             return thunkAPI.rejectWithValue({ error: error });
@@ -122,6 +124,16 @@ export const cancelOrder = createAsyncThunk(
     }
 );
 
+export const checkCode = createAsyncThunk(
+    "checkCode",
+    async (code: string, thunkAPI) => {
+        let resData = await axiosClient.post(`api/use-voucher `, {
+            code: code,
+        });
+        return resData.data;
+    }
+);
+
 const initialState: CartState = {
     isOpenCart: false,
     loadingAddCart: false,
@@ -132,6 +144,9 @@ const initialState: CartState = {
     listProductCart: [] as ProductCart[],
     listShop: [] as Shop[],
     listOder: [] as Order[],
+    oderSuccess: false,
+    voucher: null,
+    loadingCheckCode: false,
 };
 
 export const CartSlice = createSlice({
@@ -140,6 +155,12 @@ export const CartSlice = createSlice({
     reducers: {
         openCart: (state, action: PayloadAction<boolean>) => {
             state.isOpenCart = action.payload;
+        },
+        setOderSuccess: (state, action: PayloadAction<boolean>) => {
+            state.oderSuccess = action.payload;
+        },
+        setVoucher: (state, action: PayloadAction<Voucher | null>) => {
+            state.voucher = action.payload;
         },
     },
     extraReducers: {
@@ -246,9 +267,24 @@ export const CartSlice = createSlice({
             state.loadingCancelOrder = true;
         },
         ////////////////////////////////////////////////////////////////
+        [checkCode.fulfilled.toString()]: (
+            state,
+            action: PayloadAction<any>
+        ) => {
+            state.loadingCheckCode = false;
+            state.voucher = action.payload.data;
+        },
+        [checkCode.rejected.toString()]: (state, { payload }) => {
+            state.loadingCheckCode = false;
+            warning("Mã không sử dụng được.");
+        },
+        [checkCode.pending.toString()]: (state) => {
+            state.loadingCheckCode = true;
+        },
+        ////////////////////////////////////////////////////////////////
     },
 });
 
 // Action creators are generated for each case reducer function
-export const { openCart } = CartSlice.actions;
+export const { openCart, setOderSuccess, setVoucher } = CartSlice.actions;
 export default CartSlice.reducer;
